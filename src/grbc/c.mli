@@ -65,7 +65,7 @@ val grb_MAX_STRLEN     : int
 val grb_MAX_CONCURRENT : int
 
 (* Model attributes *)
-type attr =
+type grbAttr =
   | GRB_INT_ATTR_NUMCONSTRS        (* # of constraints *)
   | GRB_INT_ATTR_NUMVARS              (* # of vars *)
   | GRB_INT_ATTR_NUMSOS                (* # of sos constraints *)
@@ -266,3 +266,55 @@ type attr =
 (* Alternate define *)
 
   | GRB_DBL_ATTR_Xn
+
+type grbGeneral =
+  | GRB_GENCONSTR_MAX
+  | GRB_GENCONSTR_MIN
+  | GRB_GENCONSTR_ABS
+  | GRB_GENCONSTR_AND
+  | GRB_GENCONSTR_OR
+  | GRB_GENCONSTR_INDICATOR
+
+type grbDataType = Char | Int | Double | String (* type of the data in attribute *)
+(* type of the attribute *)
+type grbAttrType =
+| Model (* model attribute *)
+| Variable (* variable attribute *)
+| Linear (* linear constraint attribute *)
+| SOS (* SOS constraint attribute *)
+| Quadratic (* quadratic constraint attribute *)
+| General (* general constraint attribute *)
+val string_of_attr : grbAttr -> string
+val getattrinfo: grbModel -> grbAttr -> grbDataType * grbAttrType * bool (* bool indicates if settable *)
+val getattrinfo_s: grbModel -> string -> grbDataType * grbAttrType * bool (* bool indicates if settable *)
+val isattravailable: grbModel -> grbAttr -> bool
+type grbAttrData = Char of char | Int of int | Double of float | String of string | Bool of bool
+val getattr: grbModel -> grbAttr -> grbAttrData
+val setattr: grbModel -> grbAttr -> grbAttrData -> unit
+
+(* Callback *)
+(*TODO *)
+
+val getcoeff: grbModel -> int -> int -> float
+(*TODO constraints management *)
+
+val optimize: grbModel -> unit
+val optimizeasync: grbModel -> unit
+val copymodel: grbModel -> grbModel
+val fixedmodel: grbModel -> grbModel
+
+val readmodel: grbEnv -> string -> grbModel
+val read: grbModel -> string -> unit (* read into existing model *)
+val write: grbModel -> string -> unit
+val ismodelfile: string -> bool
+(*TODO newmodel and addition of constraints *)
+
+val updatemodel: grbModel -> unit
+val resetmodel: grbModel -> unit
+val freemodel: grbModel -> unit (* shall we? *)
+val coumputeIIS: grbModel -> unit
+
+(*TODO parameters *)
+val getenv: grbModel -> grbEnv
+
+val sync: grbModel -> unit (* Wait for a previous asynchronous optimization call to complete. *)
