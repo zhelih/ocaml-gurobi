@@ -65,160 +65,204 @@ val grb_MAX_STRLEN     : int
 val grb_MAX_CONCURRENT : int
 
 (* Model attributes *)
-type charAttr =
-  | GRB_CHAR_ATTR_QCSENSE
-  | GRB_CHAR_ATTR_SENSE
-  | GRB_CHAR_ATTR_VTYPE
+type attr =
+  | GRB_INT_ATTR_NUMCONSTRS        (* # of constraints *)
+  | GRB_INT_ATTR_NUMVARS              (* # of vars *)
+  | GRB_INT_ATTR_NUMSOS                (* # of sos constraints *)
+  | GRB_INT_ATTR_NUMQCONSTRS      (* # of quadratic constraints *)
+  | GRB_INT_ATTR_NUMGENCONSTRS  (* # of general constraints *)
+  | GRB_INT_ATTR_NUMNZS                (* # of nz in A *)
+  | GRB_DBL_ATTR_DNUMNZS              (* # of nz in A *)
+  | GRB_INT_ATTR_NUMQNZS              (* # of nz in Q *)
+  | GRB_INT_ATTR_NUMQCNZS            (* # of nz in q constraints *)
+  | GRB_INT_ATTR_NUMINTVARS        (* # of integer vars *)
+  | GRB_INT_ATTR_NUMBINVARS        (* # of binary vars *)
+  | GRB_INT_ATTR_NUMPWLOBJVARS  (* # of variables with PWL obj. *)
+  | GRB_STR_ATTR_MODELNAME          (* model name *)
+  | GRB_INT_ATTR_MODELSENSE        (* 1=min, -1=max *)
+  | GRB_DBL_ATTR_OBJCON                (* Objective constant *)
+  | GRB_INT_ATTR_IS_MIP                 (* Is model a MIP? *)
+  | GRB_INT_ATTR_IS_QP                   (* Model has quadratic obj? *)
+  | GRB_INT_ATTR_IS_QCP                 (* Model has quadratic constr? *)
+  | GRB_STR_ATTR_SERVER                (* Name of compute server *)
 
-type dblAttr =
-  | GRB_DBL_ATTR_BARX
-  | GRB_DBL_ATTR_BOUND_SVIO
-  | GRB_DBL_ATTR_BOUND_SVIO_SUM
-  | GRB_DBL_ATTR_BOUND_VIO
-  | GRB_DBL_ATTR_BOUND_VIO_SUM
-  | GRB_DBL_ATTR_CDUALNORM
-  | GRB_DBL_ATTR_COMPL_VIO
-  | GRB_DBL_ATTR_COMPL_VIO_SUM
-  | GRB_DBL_ATTR_CONSTR_RESIDUAL
-  | GRB_DBL_ATTR_CONSTR_RESIDUAL_SUM
-  | GRB_DBL_ATTR_CONSTR_SRESIDUAL
-  | GRB_DBL_ATTR_CONSTR_SRESIDUAL_SUM
-  | GRB_DBL_ATTR_CONSTR_SVIO
-  | GRB_DBL_ATTR_CONSTR_SVIO_SUM
-  | GRB_DBL_ATTR_CONSTR_VIO
-  | GRB_DBL_ATTR_CONSTR_VIO_SUM
-  | GRB_DBL_ATTR_DNUMNZS
-  | GRB_DBL_ATTR_DSTART
-  | GRB_DBL_ATTR_DUAL_RESIDUAL
-  | GRB_DBL_ATTR_DUAL_RESIDUAL_SUM
-  | GRB_DBL_ATTR_DUAL_SRESIDUAL
-  | GRB_DBL_ATTR_DUAL_SRESIDUAL_SUM
-  | GRB_DBL_ATTR_DUAL_SVIO
-  | GRB_DBL_ATTR_DUAL_SVIO_SUM
-  | GRB_DBL_ATTR_DUAL_VIO
-  | GRB_DBL_ATTR_DUAL_VIO_SUM
-  | GRB_DBL_ATTR_FARKASDUAL
-  | GRB_DBL_ATTR_FARKASPROOF
-  | GRB_DBL_ATTR_INT_VIO
-  | GRB_DBL_ATTR_INT_VIO_SUM
-  | GRB_DBL_ATTR_ITERCOUNT
-  | GRB_DBL_ATTR_KAPPA
-  | GRB_DBL_ATTR_KAPPA_EXACT
-  | GRB_DBL_ATTR_LB
-  | GRB_DBL_ATTR_MAX_BOUND
-  | GRB_DBL_ATTR_MAX_COEFF
-  | GRB_DBL_ATTR_MAX_OBJ_COEFF
-  | GRB_DBL_ATTR_MAX_QCCOEFF
-  | GRB_DBL_ATTR_MAX_QOBJ_COEFF
-  | GRB_DBL_ATTR_MAX_RHS
-  | GRB_DBL_ATTR_MIN_BOUND
-  | GRB_DBL_ATTR_MIN_COEFF
-  | GRB_DBL_ATTR_MIN_OBJ_COEFF
-  | GRB_DBL_ATTR_MIN_QCCOEFF
-  | GRB_DBL_ATTR_MIN_QOBJ_COEFF
-  | GRB_DBL_ATTR_MIN_RHS
-  | GRB_DBL_ATTR_MIPGAP
-  | GRB_DBL_ATTR_N2KAPPA
-  | GRB_DBL_ATTR_NODECOUNT
-  | GRB_DBL_ATTR_OBJ
-  | GRB_DBL_ATTR_OBJBOUND
-  | GRB_DBL_ATTR_OBJBOUNDC
-  | GRB_DBL_ATTR_OBJCON
-  | GRB_DBL_ATTR_OBJN
-  | GRB_DBL_ATTR_OBJNABSTOL
-  | GRB_DBL_ATTR_OBJNCON
-  | GRB_DBL_ATTR_OBJNRELTOL
-  | GRB_DBL_ATTR_OBJNVAL
-  | GRB_DBL_ATTR_OBJNWEIGHT
-  | GRB_DBL_ATTR_OBJVAL
-  | GRB_DBL_ATTR_OPENNODECOUNT
-  | GRB_DBL_ATTR_PI
-  | GRB_DBL_ATTR_POOLOBJBOUND
-  | GRB_DBL_ATTR_POOLOBJVAL
-  | GRB_DBL_ATTR_PREFIXVAL
-  | GRB_DBL_ATTR_PSTART
-  | GRB_DBL_ATTR_QCPI
-  | GRB_DBL_ATTR_QCRHS
-  | GRB_DBL_ATTR_QCSLACK
-  | GRB_DBL_ATTR_RC
-  | GRB_DBL_ATTR_RHS
-  | GRB_DBL_ATTR_RUNTIME
-  | GRB_DBL_ATTR_SA_LBLOW
-  | GRB_DBL_ATTR_SA_LBUP
-  | GRB_DBL_ATTR_SA_OBJLOW
-  | GRB_DBL_ATTR_SA_OBJUP
-  | GRB_DBL_ATTR_SA_RHSLOW
-  | GRB_DBL_ATTR_SA_RHSUP
-  | GRB_DBL_ATTR_SA_UBLOW
-  | GRB_DBL_ATTR_SA_UBUP
-  | GRB_DBL_ATTR_SLACK
-  | GRB_DBL_ATTR_START
-  | GRB_DBL_ATTR_UB
-  | GRB_DBL_ATTR_UNBDRAY
+(* Variable attributes *)
+
+  | GRB_DBL_ATTR_LB                           (* Lower bound *)
+  | GRB_DBL_ATTR_UB                           (* Upper bound *)
+  | GRB_DBL_ATTR_OBJ                         (* Objective coeff *)
+  | GRB_CHAR_ATTR_VTYPE                    (* Integrality type *)
+  | GRB_DBL_ATTR_START                     (* MIP start value *)
+  | GRB_DBL_ATTR_PSTART                   (* LP primal solution warm start *)
+  | GRB_INT_ATTR_BRANCHPRIORITY   (* MIP branch priority *)
+  | GRB_STR_ATTR_VARNAME                 (* Variable name *)
+  | GRB_INT_ATTR_PWLOBJCVX             (* Convexity of variable PWL obj *)
   | GRB_DBL_ATTR_VARHINTVAL
-  | GRB_DBL_ATTR_VDUALNORM
-  | GRB_DBL_ATTR_X
-  | GRB_DBL_ATTR_Xn
-  | GRB_DBL_ATTR_XN
+  | GRB_INT_ATTR_VARHINTPRI
 
-type intAttr =
-  | GRB_INT_ATTR_BARITERCOUNT
-  | GRB_INT_ATTR_BOUND_SVIO_INDEX
+(* Constraint attributes *)
+
+  | GRB_DBL_ATTR_RHS                (* RHS *)
+  | GRB_DBL_ATTR_DSTART          (* LP dual solution warm start *)
+  | GRB_CHAR_ATTR_SENSE           (* Sense ('<', '>', or '=') *)
+  | GRB_STR_ATTR_CONSTRNAME  (* Constraint name *)
+  | GRB_INT_ATTR_LAZY              (* Lazy constraint? *)
+
+(* Quadratic constraint attributes *)
+
+  | GRB_DBL_ATTR_QCRHS       (* QC RHS *)
+  | GRB_CHAR_ATTR_QCSENSE  (* QC sense ('<', '>', or '=') *)
+  | GRB_STR_ATTR_QCNAME     (* QC name *)
+
+(* General constraint attributes *)
+
+  | GRB_INT_ATTR_GENCONSTRTYPE    (* Type of general constraint *)
+  | GRB_STR_ATTR_GENCONSTRNAME    (* Name of general constraint *)
+
+(* Model statistics *)
+
+  | GRB_DBL_ATTR_MAX_COEFF           (* Max (abs) nz coeff in A *)
+  | GRB_DBL_ATTR_MIN_COEFF           (* Min (abs) nz coeff in A *)
+  | GRB_DBL_ATTR_MAX_BOUND           (* Max (abs) finite var bd *)
+  | GRB_DBL_ATTR_MIN_BOUND           (* Min (abs) var bd *)
+  | GRB_DBL_ATTR_MAX_OBJ_COEFF    (* Max (abs) obj coeff *)
+  | GRB_DBL_ATTR_MIN_OBJ_COEFF    (* Min (abs) obj coeff *)
+  | GRB_DBL_ATTR_MAX_RHS               (* Max (abs) rhs coeff *)
+  | GRB_DBL_ATTR_MIN_RHS               (* Min (abs) rhs coeff *)
+  | GRB_DBL_ATTR_MAX_QCCOEFF       (* Max (abs) nz coeff in Q *)
+  | GRB_DBL_ATTR_MIN_QCCOEFF       (* Min (abs) nz coeff in Q *)
+  | GRB_DBL_ATTR_MAX_QOBJ_COEFF  (* Max (abs) obj coeff of quadratic part *)
+  | GRB_DBL_ATTR_MIN_QOBJ_COEFF  (* Min (abs) obj coeff of quadratic part *)
+
+(* Model solution attributes *)
+
+  | GRB_DBL_ATTR_RUNTIME            (* Run time for optimization *)
+  | GRB_INT_ATTR_STATUS              (* Optimization status *)
+  | GRB_DBL_ATTR_OBJVAL              (* Solution objective *)
+  | GRB_DBL_ATTR_OBJBOUND          (* Best bound on solution *)
+  | GRB_DBL_ATTR_OBJBOUNDC        (* Continuous bound *)
+  | GRB_DBL_ATTR_POOLOBJBOUND   (* Best bound on pool solution *)
+  | GRB_DBL_ATTR_POOLOBJVAL      (* Solution objective for solutionnumber *)
+  | GRB_DBL_ATTR_MIPGAP              (* MIP optimality gap *)
+  | GRB_INT_ATTR_SOLCOUNT          (* # of solutions found *)
+  | GRB_DBL_ATTR_ITERCOUNT        (* Iters performed (simplex) *)
+  | GRB_INT_ATTR_BARITERCOUNT   (* Iters performed (barrier) *)
+  | GRB_DBL_ATTR_NODECOUNT         (* Nodes explored (B&C) *)
+  | GRB_DBL_ATTR_OPENNODECOUNT  (* Unexplored nodes (B&C) *)
+  | GRB_INT_ATTR_HASDUALNORM     (* 0, no basis,
+                                                     1, has basis, so can be computed
+                                                     2, available *)
+
+(* Variable attributes related to the current solution *)
+
+  | GRB_DBL_ATTR_X                  (* Solution value *)
+  | GRB_DBL_ATTR_XN                (* Alternate MIP solution *)
+  | GRB_DBL_ATTR_BARX            (* Best barrier iterate *)
+  | GRB_DBL_ATTR_RC                (* Reduced costs *)
+  | GRB_DBL_ATTR_VDUALNORM  (* Dual norm square *)
+  | GRB_INT_ATTR_VBASIS        (* Variable basis status *)
+
+(* Constraint attributes related to the current solution *)
+
+  | GRB_DBL_ATTR_PI                (* Dual value *)
+  | GRB_DBL_ATTR_QCPI            (* Dual value for QC *)
+  | GRB_DBL_ATTR_SLACK          (* Constraint slack *)
+  | GRB_DBL_ATTR_QCSLACK      (* QC Constraint slack *)
+  | GRB_DBL_ATTR_CDUALNORM  (* Dual norm square *)
+  | GRB_INT_ATTR_CBASIS        (* Constraint basis status *)
+
+(* Solution quality attributes *)
+
+  | GRB_DBL_ATTR_BOUND_VIO
+  | GRB_DBL_ATTR_BOUND_SVIO
   | GRB_INT_ATTR_BOUND_VIO_INDEX
-  | GRB_INT_ATTR_BRANCHPRIORITY
-  | GRB_INT_ATTR_CBASIS
-  | GRB_INT_ATTR_COMPL_VIO_INDEX
+  | GRB_INT_ATTR_BOUND_SVIO_INDEX
+  | GRB_DBL_ATTR_BOUND_VIO_SUM
+  | GRB_DBL_ATTR_BOUND_SVIO_SUM
+  | GRB_DBL_ATTR_CONSTR_VIO
+  | GRB_DBL_ATTR_CONSTR_SVIO
+  | GRB_INT_ATTR_CONSTR_VIO_INDEX
+  | GRB_INT_ATTR_CONSTR_SVIO_INDEX
+  | GRB_DBL_ATTR_CONSTR_VIO_SUM
+  | GRB_DBL_ATTR_CONSTR_SVIO_SUM
+  | GRB_DBL_ATTR_CONSTR_RESIDUAL
+  | GRB_DBL_ATTR_CONSTR_SRESIDUAL
   | GRB_INT_ATTR_CONSTR_RESIDUAL_INDEX
   | GRB_INT_ATTR_CONSTR_SRESIDUAL_INDEX
-  | GRB_INT_ATTR_CONSTR_SVIO_INDEX
-  | GRB_INT_ATTR_CONSTR_VIO_INDEX
+  | GRB_DBL_ATTR_CONSTR_RESIDUAL_SUM
+  | GRB_DBL_ATTR_CONSTR_SRESIDUAL_SUM
+  | GRB_DBL_ATTR_DUAL_VIO
+  | GRB_DBL_ATTR_DUAL_SVIO
+  | GRB_INT_ATTR_DUAL_VIO_INDEX
+  | GRB_INT_ATTR_DUAL_SVIO_INDEX
+  | GRB_DBL_ATTR_DUAL_VIO_SUM
+  | GRB_DBL_ATTR_DUAL_SVIO_SUM
+  | GRB_DBL_ATTR_DUAL_RESIDUAL
+  | GRB_DBL_ATTR_DUAL_SRESIDUAL
   | GRB_INT_ATTR_DUAL_RESIDUAL_INDEX
   | GRB_INT_ATTR_DUAL_SRESIDUAL_INDEX
-  | GRB_INT_ATTR_DUAL_SVIO_INDEX
-  | GRB_INT_ATTR_DUAL_VIO_INDEX
-  | GRB_INT_ATTR_GENCONSTRTYPE
-  | GRB_INT_ATTR_HASDUALNORM
-  | GRB_INT_ATTR_IIS_CONSTR
-  | GRB_INT_ATTR_IIS_GENCONSTR
-  | GRB_INT_ATTR_IIS_LB
-  | GRB_INT_ATTR_IIS_MINIMAL
-  | GRB_INT_ATTR_IIS_QCONSTR
-  | GRB_INT_ATTR_IIS_SOS
-  | GRB_INT_ATTR_IIS_UB
-  | GRB_INT_ATTR_INFEASVAR
+  | GRB_DBL_ATTR_DUAL_RESIDUAL_SUM
+  | GRB_DBL_ATTR_DUAL_SRESIDUAL_SUM
+  | GRB_DBL_ATTR_INT_VIO
   | GRB_INT_ATTR_INT_VIO_INDEX
-  | GRB_INT_ATTR_IS_MIP
-  | GRB_INT_ATTR_IS_QCP
-  | GRB_INT_ATTR_IS_QP
-  | GRB_INT_ATTR_LAZY
-  | GRB_INT_ATTR_MODELSENSE
-  | GRB_INT_ATTR_NUMBINVARS
-  | GRB_INT_ATTR_NUMCONSTRS
-  | GRB_INT_ATTR_NUMGENCONSTRS
-  | GRB_INT_ATTR_NUMINTVARS
-  | GRB_INT_ATTR_NUMNZS
-  | GRB_INT_ATTR_NUMOBJ
-  | GRB_INT_ATTR_NUMPWLOBJVARS
-  | GRB_INT_ATTR_NUMQCNZS
-  | GRB_INT_ATTR_NUMQCONSTRS
-  | GRB_INT_ATTR_NUMQNZS
-  | GRB_INT_ATTR_NUMSOS
-  | GRB_INT_ATTR_NUMVARS
-  | GRB_INT_ATTR_OBJNPRIORITY
-  | GRB_INT_ATTR_PWLOBJCVX
-  | GRB_INT_ATTR_SOLCOUNT
-  | GRB_INT_ATTR_STATUS
-  | GRB_INT_ATTR_TUNE_RESULTCOUNT
-  | GRB_INT_ATTR_UNBDVAR
-  | GRB_INT_ATTR_VARHINTPRI
-  | GRB_INT_ATTR_VARPRESTAT
-  | GRB_INT_ATTR_VBASIS
+  | GRB_DBL_ATTR_INT_VIO_SUM
+  | GRB_DBL_ATTR_COMPL_VIO
+  | GRB_INT_ATTR_COMPL_VIO_INDEX
+  | GRB_DBL_ATTR_COMPL_VIO_SUM
+  | GRB_DBL_ATTR_KAPPA
+  | GRB_DBL_ATTR_KAPPA_EXACT
+  | GRB_DBL_ATTR_N2KAPPA
 
-type strAttr =
-  | GRB_STR_ATTR_CONSTRNAME
-  | GRB_STR_ATTR_GENCONSTRNAME
-  | GRB_STR_ATTR_MODELNAME
-  | GRB_STR_ATTR_OBJNNAME
-  | GRB_STR_ATTR_QCNAME
-  | GRB_STR_ATTR_SERVER
-  | GRB_STR_ATTR_VARNAME
+(* LP sensitivity analysis *)
+
+  | GRB_DBL_ATTR_SA_OBJLOW
+  | GRB_DBL_ATTR_SA_OBJUP
+  | GRB_DBL_ATTR_SA_LBLOW
+  | GRB_DBL_ATTR_SA_LBUP
+  | GRB_DBL_ATTR_SA_UBLOW
+  | GRB_DBL_ATTR_SA_UBUP
+  | GRB_DBL_ATTR_SA_RHSLOW
+  | GRB_DBL_ATTR_SA_RHSUP
+
+(* IIS *)
+
+  | GRB_INT_ATTR_IIS_MINIMAL      (* Boolean: Is IIS Minimal? *)
+  | GRB_INT_ATTR_IIS_LB                (* Boolean: Is var LB in IIS? *)
+  | GRB_INT_ATTR_IIS_UB                (* Boolean: Is var UB in IIS? *)
+  | GRB_INT_ATTR_IIS_CONSTR        (* Boolean: Is constr in IIS? *)
+  | GRB_INT_ATTR_IIS_SOS              (* Boolean: Is SOS in IIS? *)
+  | GRB_INT_ATTR_IIS_QCONSTR      (* Boolean: Is QConstr in IIS? *)
+  | GRB_INT_ATTR_IIS_GENCONSTR  (* Boolean: Is general constr in IIS? *)
+
+(* Tuning *)
+
+  | GRB_INT_ATTR_TUNE_RESULTCOUNT
+
+(* Advanced simplex features *)
+
+  | GRB_DBL_ATTR_FARKASDUAL
+  | GRB_DBL_ATTR_FARKASPROOF
+  | GRB_DBL_ATTR_UNBDRAY
+  | GRB_INT_ATTR_INFEASVAR
+  | GRB_INT_ATTR_UNBDVAR
+
+(* Presolve attribute *)
+
+  | GRB_INT_ATTR_VARPRESTAT
+  | GRB_DBL_ATTR_PREFIXVAL
+
+(* Multi objective attribute, controlled by parameter ObjNumber (= i) *)
+
+  | GRB_DBL_ATTR_OBJN                  (* ith objective *)
+  | GRB_DBL_ATTR_OBJNVAL            (* Solution objective for Multi-objectives *)
+  | GRB_DBL_ATTR_OBJNCON            (* constant term *)
+  | GRB_DBL_ATTR_OBJNWEIGHT      (* weight *)
+  | GRB_INT_ATTR_OBJNPRIORITY  (* priority *)
+  | GRB_DBL_ATTR_OBJNRELTOL      (* relative tolerance *)
+  | GRB_DBL_ATTR_OBJNABSTOL      (* absolute tolerance *)
+  | GRB_STR_ATTR_OBJNNAME          (* name *)
+  | GRB_INT_ATTR_NUMOBJ              (* number of objectives *)
+
+(* Alternate define *)
+
+  | GRB_DBL_ATTR_Xn
