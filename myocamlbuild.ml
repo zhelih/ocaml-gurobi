@@ -1,5 +1,5 @@
 (* OASIS_START *)
-(* DO NOT EDIT (digest: 0bfd05c6d9746461d8c2cdb183c407ff) *)
+(* DO NOT EDIT (digest: 5dfe81f8e3ad25e3d3c1982d76327dd6) *)
 module OASISGettext = struct
 (* # 22 "src/oasis/OASISGettext.ml" *)
 
@@ -880,7 +880,7 @@ open Ocamlbuild_plugin;;
 let package_default =
   {
      MyOCamlbuildBase.lib_ocaml = [];
-     lib_c = [("tests_c", "./src/grbc", [])];
+     lib_c = [("tests_c", "src/grbc", [])];
      flags =
        [
           (["oasis_executable_tests_c_ccopt"; "compile"],
