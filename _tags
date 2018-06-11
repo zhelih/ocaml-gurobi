@@ -1,5 +1,5 @@
 # OASIS_START
-# DO NOT EDIT (digest: 03b1bc805b7aa52fe508ee4c387e5983)
+# DO NOT EDIT (digest: e1af4089966cbc28ff5d9d58328e8b2c)
 # Ignore VCS directories, you can use the same kind of rule outside
 # OASIS_START/STOP if you want to exclude directories that contains
 # useless stuff for the build process
@@ -17,5 +17,10 @@ true: annot, bin_annot
 # Executable tests_c
 <src/grbc/*.ml{,i,y}>: oasis_executable_tests_c_ccopt
 "src/grbc/c_stubs.c": oasis_executable_tests_c_ccopt
+"src/grbc/test.native": oasis_executable_tests_c_cclib
+"src/grbc/libtests_c_stubs.lib": oasis_executable_tests_c_cclib
+"src/grbc/dlltests_c_stubs.dll": oasis_executable_tests_c_cclib
+"src/grbc/libtests_c_stubs.a": oasis_executable_tests_c_cclib
+"src/grbc/dlltests_c_stubs.so": oasis_executable_tests_c_cclib
 "src/grbc/test.native": use_libtests_c_stubs
 # OASIS_STOP
