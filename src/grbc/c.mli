@@ -1,6 +1,6 @@
 type grbModel
 type grbEnv
-
+(*
 (* version numbers *)
 val grb_VERSION_MAJOR     : int
 val grb_VERSION_MINOR     : int
@@ -297,14 +297,15 @@ val setattr: grbModel -> grbAttr -> grbAttrData -> unit
 
 val getcoeff: grbModel -> int -> int -> float
 (*TODO constraints management *)
-
+*)
 val optimize: grbModel -> unit
+(*
 val optimizeasync: grbModel -> unit
 val copymodel: grbModel -> grbModel
 val fixedmodel: grbModel -> grbModel
-
+*)
 val readmodel: grbEnv -> string -> grbModel
-val read: grbModel -> string -> unit (* read into existing model *)
+(*val read: grbModel -> string -> unit (* read into existing model *)
 val write: grbModel -> string -> unit
 val ismodelfile: string -> bool
 (*TODO newmodel and addition of constraints *)
@@ -318,3 +319,6 @@ val coumputeIIS: grbModel -> unit
 val getenv: grbModel -> grbEnv
 
 val sync: grbModel -> unit (* Wait for a previous asynchronous optimization call to complete. *)
+*)
+
+val loadenv: ?logfile:string -> unit -> grbEnv
