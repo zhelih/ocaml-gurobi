@@ -41,6 +41,6 @@ external loadenv: ?logfile:string -> unit -> grbEnv = "caml_grb_loadenv"
 let () = Callback.register_exception "GRBError" (GRBError (GRB_UNKNOWN, 0, ""))
 let () = Printexc.register_printer (fun exn ->
   match exn with
-  | GRBError (_, code, str) -> Some ("GRBError : " ^ str ^ " (" ^ string_of_int(code) ^ ")")
+  | GRBError (_, code, str) -> Some ("GRBError : " ^ str ^ " (" ^ string_of_int code ^ ")")
   | _ -> None
 )
