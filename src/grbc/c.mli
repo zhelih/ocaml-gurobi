@@ -9,9 +9,9 @@ val grb_VERSION_TECHNICAL : int
 (* default and max priority for Compute Server jobs *)
 val grb_DEFAULT_CS_PRIORITY : int
 val grb_MAX_CS_PRIORITY     : int
-
+*)
 (* error codes *)
-type grbError =
+type grbErrorCode =
   | GRB_ERROR_OUT_OF_MEMORY
   | GRB_ERROR_NULL_ARGUMENT
   | GRB_ERROR_INVALID_ARGUMENT
@@ -41,7 +41,11 @@ type grbError =
   | GRB_ERROR_UPDATEMODE_CHANGE
   | GRB_ERROR_CLOUD
   | GRB_ERROR_MODEL_MODIFICATION
+  | GRB_UNKNOWN
 
+exception GRBError of (grbErrorCode * int * string)
+
+(*
 (* constraint senses *)
 type grbSense = GRB_LESS_EQUAL | GRB_GREATER_EQUAL | GRB_EQUAL
 
