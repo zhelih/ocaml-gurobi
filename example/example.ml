@@ -1,3 +1,5 @@
+open Gurobi
+
 let () =
   try
     let env = C.loadenv () in

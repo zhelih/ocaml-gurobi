@@ -1,18 +1,10 @@
 (library
   (name gurobi)
   (public_name gurobi)
-  (wrapped false)
-  (modules (:standard \ test))
   (foreign_stubs
     (language c)
     (flags :standard -g -Wall -Wextra -Wno-unused-parameter)
     (names c_stubs)
   )
   (c_library_flags -lgurobi91)
-)
-
-(executable
-  (name test)
-  (modules test)
-  (libraries gurobi)
 )
