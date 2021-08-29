@@ -1,0 +1,23 @@
+opam-version: "2.0"
+name: "gurobi"
+synopsis: "Bindings to Gurobi LP solver"
+description: "The Gurobi Optimizer is a commercial optimization solver for linear programming, quadratic programming, quadratically constrained programming, mixed integer linear programming, mixed-integer quadratic programming, and mixed-integer quadratically constrained programming."
+maintainer: "Eugene Lykhovyd <lykhovyd@gmail.com>"
+authors: ["Eugene Lykhovyd <lykhovyd@gmail.com>" "ygrek <ygrek@autistici.org>"]
+license: "LGPL-2.1-only with OCaml-LGPL-linking-exception"
+tags: ["clib:stdc" "clib:gurobi"]
+homepage: "https://github.com/zhelih/ocaml-gurobi"
+bug-reports: "https://github.com/zhelih/ocaml-gurobi/issues"
+depends: [
+  "ocaml" {>= "4.10.0"}
+  "dune" {>= "2.1.0"}
+  "base-bytes"
+  "base-unix"
+  "odoc" {with-doc}
+]
+build: [
+  ["dune" "subst"] {pinned}
+  ["dune" "build" "-p" name "-j" jobs "@install" "@doc" {with-doc}]
+]
+post-messages: "This package requires Gurobi development files installed" {failure}
+dev-repo: "git://github.com/zhelih/ocaml-gurobi.git"
