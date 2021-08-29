@@ -1,5 +1,5 @@
 default:
-	$(MAKE) C_INCLUDE_PATH=$(GUROBI_HOME)/include LIBRARY_PATH=$(GUROBI_HOME)/lib build
+	$(MAKE) --no-print-directory C_INCLUDE_PATH=$(GUROBI_HOME)/include LIBRARY_PATH=$(GUROBI_HOME)/lib build
 
 build:
 	dune build
