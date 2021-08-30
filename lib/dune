@@ -1,10 +1,19 @@
 (library
   (name gurobi)
   (public_name gurobi)
-  (foreign_stubs
-    (language c)
-    (flags :standard -g -Wall -Wextra -Wno-unused-parameter)
-    (names c_stubs)
-  )
-  (c_library_flags -lgurobi91)
+  (libraries ctypes ctypes.foreign bindings)
+	(foreign_stubs (language c) (flags (:include c_flags.sexp)))
+	(c_library_flags (:include c_library_flags.sexp))
+	(ocamlopt_flags (-ccopt (:include ccopts.sexp)))
 )
+
+(rule
+  (targets c_flags.sexp c_library_flags.sexp ccopts.sexp)
+  (deps    (:x ../config/discover.exe))
+  (action  (run %{x} -ocamlc %{ocamlc}))
+)
+
+(rule
+  (targets bindings_stubs.ml)
+  (deps ../stubgen/bindings_stubs_gen.exe)
+  (action (with-stdout-to %{targets} (run %{deps} -ml))))
