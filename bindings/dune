@@ -1,3 +1,4 @@
 (library
  (name bindings)
+ (public_name gurobi.bindings)
  (libraries ctypes.stubs ctypes))
