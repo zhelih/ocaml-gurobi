@@ -1,22 +1,4 @@
 (executable
- (name bindings_c_gen)
- (modules bindings_c_gen)
+ (name stubgen)
+ (modules stubgen)
  (libraries bindings ctypes.stubs ctypes))
-
-(rule
- (targets bindings_stubs_gen.c)
- (deps (:stubgen ../stubgen/bindings_c_gen.exe))
- (action (with-stdout-to %{targets} (run %{stubgen} -c))))
-
-(rule (targets bindings_stubs_gen.exe)
- (deps (:first_dep bindings_stubs_gen.c))
- (action
-  (bash
-   "%{cc} %{first_dep} -I `dirname %{lib:ctypes:ctypes_cstubs_internals.h}` -I %{ocaml_where} -o %{targets}"))
-)
-
-(rule
-  (targets c_library_flags c_flags)
-  (deps    (:x ../config/discover.exe))
-  (action  (run %{x} -ocamlc %{ocamlc}))
-)

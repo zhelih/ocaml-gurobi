@@ -1,19 +1,29 @@
 (library
   (name gurobi)
   (public_name gurobi)
-  (libraries ctypes ctypes.foreign gurobi.bindings)
-	;(foreign_stubs (language c) (flags (:include c_flags.sexp)))
-	;(c_library_flags (:include c_library_flags.sexp))
-	;(ocamlopt_flags (-ccopt (:include ccopts.sexp)))
+  (libraries ctypes gurobi.bindings)
+  (foreign_stubs
+    (language c)
+    (flags :standard -g -Wall -Wextra -Wno-unused-parameter)
+    (names gurobi_stubs)
+  )
+  (c_library_flags -lgurobi91)
 )
 
 (rule
-  (targets c_flags.sexp c_library_flags.sexp ccopts.sexp)
-  (deps    (:x ../config/discover.exe))
-  (action  (run %{x} -ocamlc %{ocamlc}))
-)
+  (targets gurobi_types.ml)
+  (deps gurobi_types_gen.exe)
+  (action (with-stdout-to %{targets} (run %{deps}))))
 
 (rule
-  (targets bindings_stubs.ml)
-  (deps ../stubgen/bindings_stubs_gen.exe)
-  (action (with-stdout-to %{targets} (run %{deps} -ml))))
+ (targets gurobi_types_gen.c gurobi_generated.ml gurobi_stubs.c)
+ (deps (:stubgen ../stubgen/stubgen.exe))
+ (action (run %{stubgen})))
+
+(rule
+ (targets gurobi_types_gen.exe)
+ (deps gurobi_types_gen.c)
+ (action
+  (bash
+   "%{cc} %{deps} -I `dirname %{lib:ctypes:ctypes_cstubs_internals.h}` -I %{ocaml_where} -o %{targets}"))
+)

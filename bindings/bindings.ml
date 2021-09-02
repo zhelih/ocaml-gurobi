@@ -1,3 +1,21 @@
+open Ctypes
+
+module Stubs(F : Cstubs.FOREIGN) =
+struct
+
+open F
+
+type grb_Env
+let grb_Env : grb_Env structure typ = structure "GRBEnv"
+type grb_Model
+let grb_Model : grb_Model structure typ = structure "GRBModel"
+
+let optimize = foreign "GRBoptimize" ((ptr grb_Model) @-> returning int)
+let loadenv = foreign "GRBloadenv" ((ptr (ptr grb_Env))  @-> string @-> returning int)
+let readmodel = foreign "GRBreadmodel" ((ptr grb_Env) @-> string @-> (ptr (ptr grb_Model)) @-> returning int)
+
+end
+
 type grb_error =
   | OUT_OF_MEMORY (** GRB_ERROR_OUT_OF_MEMORY *)
   | NULL_ARGUMENT (** GRB_ERROR_NULL_ARGUMENT *)
@@ -29,7 +47,7 @@ type grb_error =
   | CLOUD (** GRB_ERROR_CLOUD *)
   | MODEL_MODIFICATION (** GRB_ERROR_MODEL_MODIFICATION *)
 
-module Enums = functor (T : Cstubs.Types.TYPE) -> struct
+module Types(T: Cstubs.Types.TYPE) = struct
   let grb_error_out_of_memory = T.constant "GRB_ERROR_OUT_OF_MEMORY" T.int
   let grb_error_null_argument = T.constant "GRB_ERROR_NULL_ARGUMENT" T.int
   let grb_error_invalid_argument = T.constant "GRB_ERROR_INVALID_ARGUMENT" T.int
