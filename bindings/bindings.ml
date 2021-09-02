@@ -6,9 +6,9 @@ struct
 open F
 
 type grb_Env
-let grb_Env : grb_Env structure typ = structure "GRBEnv"
+let grb_Env : grb_Env structure typ = structure "_GRBenv"
 type grb_Model
-let grb_Model : grb_Model structure typ = structure "GRBModel"
+let grb_Model : grb_Model structure typ = structure "_GRBmodel"
 
 let optimize = foreign "GRBoptimize" ((ptr grb_Model) @-> returning int)
 let loadenv = foreign "GRBloadenv" ((ptr (ptr grb_Env))  @-> string @-> returning int)
