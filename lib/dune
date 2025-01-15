@@ -7,7 +7,7 @@
     (flags :standard -g -Wall -Wextra -Wno-unused-parameter)
     (names gurobi_stubs)
   )
-  (c_library_flags -lgurobi91)
+  (c_library_flags -lgurobi120)
 )
 
 (rule
