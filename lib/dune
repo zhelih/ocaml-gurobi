@@ -4,10 +4,10 @@
   (libraries ctypes gurobi.bindings)
   (foreign_stubs
     (language c)
-    (flags :standard -g -Wall -Wextra -Wno-unused-parameter)
+    (flags :standard -g -Wall -Wextra -Wno-unused-parameter -Wno-discarded-qualifiers -Wno-incompatible-pointer-types)
     (names gurobi_stubs)
   )
-  (c_library_flags -lgurobi120)
+  (c_library_flags -lgurobi130)
 )
 
 (rule

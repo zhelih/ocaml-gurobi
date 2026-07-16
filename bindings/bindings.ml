@@ -12,6 +12,7 @@ let grb_Model : grb_Model structure typ = structure "_GRBmodel"
 type grb_Batch
 let grb_Batch : grb_Batch structure typ = structure "_GRBbatch"
 
+(* INSERT HERE from the script *)
 let isattravailable = foreign "GRBisattravailable" (ptr grb_Model @-> string @-> returning int)
 let getintattr = foreign "GRBgetintattr" (ptr grb_Model @-> string @-> ptr int @-> returning int)
 let setintattr = foreign "GRBsetintattr" (ptr grb_Model @-> string @-> int @-> returning int)
@@ -94,6 +95,7 @@ let feasibility = foreign "GRBfeasibility" (ptr grb_Model @-> ptr (ptr grb_Model
 let linearizemodel = foreign "GRBlinearizemodel" (ptr grb_Model @-> ptr (ptr grb_Model) @-> returning int)
 let resultmodel = foreign "GRBresultmodel" (ptr grb_Model @-> string @-> ptr (ptr grb_Model) @-> returning int)
 let dualmodel = foreign "GRBdualmodel" (ptr grb_Model @-> ptr (ptr grb_Model) @-> returning int)
+let isgpusupported = foreign "GRBisgpusupported" (ptr grb_Env @-> returning int)
 let readmodel = foreign "GRBreadmodel" (ptr grb_Env @-> string @-> ptr (ptr grb_Model) @-> returning int)
 let read = foreign "GRBread" (ptr grb_Model @-> string @-> returning int)
 let write = foreign "GRBwrite" (ptr grb_Model @-> string @-> returning int)
@@ -147,7 +149,9 @@ let replay = foreign "GRBreplay" (string @-> returning int)
 let setobjective = foreign "GRBsetobjective" (ptr grb_Model @-> int @-> double @-> int @-> ptr int @-> ptr double @-> int @-> ptr int @-> ptr int @-> ptr double @-> returning int)
 let setobjectiven = foreign "GRBsetobjectiven" (ptr grb_Model @-> int @-> int @-> double @-> double @-> double @-> string @-> double @-> int @-> ptr int @-> ptr double @-> returning int)
 let clean2 = foreign "GRBclean2" (ptr int @-> ptr int @-> ptr double @-> returning void)
+let clean2checknan = foreign "GRBclean2checknan" (ptr int @-> ptr int @-> ptr double @-> returning int)
 let clean3 = foreign "GRBclean3" (ptr int @-> ptr int @-> ptr int @-> ptr double @-> returning void)
+let clean3checknan = foreign "GRBclean3checknan" (ptr int @-> ptr int @-> ptr int @-> ptr double @-> returning int)
 let printquality = foreign "GRBprintquality" (ptr grb_Model @-> returning int)
 let msg = foreign "GRBmsg" (ptr grb_Env @-> string @-> returning void)
 let getintparam = foreign "GRBgetintparam" (ptr grb_Env @-> string @-> ptr int @-> returning int)
@@ -163,12 +167,12 @@ let setdblparam = foreign "GRBsetdblparam" (ptr grb_Env @-> string @-> double @-
 let setstrparam = foreign "GRBsetstrparam" (ptr grb_Env @-> string @-> string @-> returning int)
 let getparamtype = foreign "GRBgetparamtype" (ptr grb_Env @-> string @-> returning int)
 let resetparams = foreign "GRBresetparams" (ptr grb_Env @-> returning int)
-let copyparams = foreign "GRBcopyparams" (ptr grb_Env @-> ptr grb_Env @-> returning int)
 let writeparams = foreign "GRBwriteparams" (ptr grb_Env @-> string @-> returning int)
 let readparams = foreign "GRBreadparams" (ptr grb_Env @-> string @-> returning int)
 let readconcurrentsettings = foreign "GRBreadconcurrentsettings" (ptr grb_Model @-> string @-> returning int)
 let readmultiobjsettings = foreign "GRBreadmultiobjsettings" (ptr grb_Model @-> string @-> returning int)
 let readtunebasesettings = foreign "GRBreadtunebasesettings" (ptr grb_Env @-> string @-> returning int)
+let readtuneignoresettings = foreign "GRBreadtuneignoresettings" (ptr grb_Env @-> string @-> returning int)
 let getnumparams = foreign "GRBgetnumparams" (ptr grb_Env @-> returning int)
 let getparamname = foreign "GRBgetparamname" (ptr grb_Env @-> int @-> ptr string @-> returning int)
 let getnumattributes = foreign "GRBgetnumattributes" (ptr grb_Model @-> returning int)
@@ -212,6 +216,8 @@ let tunemodels = foreign "GRBtunemodels" (ptr grb_Env @-> int @-> ptr (ptr grb_M
 let gettuneresult = foreign "GRBgettuneresult" (ptr grb_Model @-> int @-> returning int)
 let gettunelog = foreign "GRBgettunelog" (ptr grb_Model @-> int @-> ptr string @-> returning int)
 let writetunelog = foreign "GRBwritetunelog" (ptr grb_Model @-> int @-> string @-> returning int)
+let writetuneparamset = foreign "GRBwritetuneparamset" (ptr grb_Model @-> string @-> int @-> returning int)
+let writetuneparamsets = foreign "GRBwritetuneparamsets" (ptr grb_Model @-> string @-> returning int)
 
 end
 
